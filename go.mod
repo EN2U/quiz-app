@@ -1,8 +1,11 @@
 module quiz-app
 
-go 1.18
+go 1.20
 
-require github.com/spf13/cobra v1.8.1
+require (
+	github.com/gorilla/mux v1.8.1
+	github.com/spf13/cobra v1.8.1
+)
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect

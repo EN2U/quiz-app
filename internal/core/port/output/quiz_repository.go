@@ -6,4 +6,5 @@ type QuizRepository interface {
 	FetchQuestions() []domain.QuestionEntity
 	SaveResult(score int)
 	GetResults() []int
+	GetAnswers() []domain.AnswersEntity
 }

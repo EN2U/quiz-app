@@ -5,31 +5,27 @@ package cmd
 
 import (
 	"os"
-	quizRepository "quiz-app/internal/adapter/repository"
+	"quiz-app/internal/adapter/repository"
 	"quiz-app/internal/core/service"
 
 	"github.com/spf13/cobra"
 )
 
-var quizService = service.NewQuizService(quizRepository.NewQuizRepository())
+var quizRepository = quizrepository.NewQuizRepository()
+var quizService = service.NewQuizService(quizRepository)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "quiz-app",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Quiz-App CLI",
+	Long: `Quiz-App CLI is a command-line tool for interacting with a simple quiz application.
+It allows users to answer quiz questions, submit their answers, and view their performance.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+Quiz-App CLI supports fetching quiz questions, submitting answers, and comparing
+your performance with others who have taken the quiz. Built with Go and Cobra, 
+it provides a seamless experience for quiz enthusiasts.`,
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -38,13 +34,5 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.quiz-app.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

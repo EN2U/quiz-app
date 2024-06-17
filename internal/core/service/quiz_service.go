@@ -2,7 +2,7 @@ package service
 
 import (
 	"quiz-app/internal/core/domain"
-	"quiz-app/internal/port/output"
+	"quiz-app/internal/core/port/output"
 )
 
 type QuizService struct {
@@ -33,14 +33,17 @@ func (service *QuizService) SubmitAnswers(answers map[int]int) (int, int) {
 	return correctCount, totalQuestions
 }
 
-func (s *QuizService) GetPerformance(score int) float64 {
-	results := s.repo.GetResults()
+func (s *QuizService) GetPerformance(validAnswers int, totalAnswers int) float64 {
+	newAnswerPerformance := float64(validAnswers) / float64(totalAnswers)
+	previousAnswers := s.repo.GetAnswers()
 	betterThan := 0
-	for _, result := range results {
-		if score > result {
+
+	for _, answer := range previousAnswers {
+		answerPerformance := float64(answer.ValidAnswers) / float64(answer.ValidAnswers+answer.InvalidAnswers)
+		if newAnswerPerformance > answerPerformance {
 			betterThan++
 		}
 	}
 
-	return float64(betterThan) / float64(len(results)) * 100
+	return (float64(betterThan) / float64(len(previousAnswers))) * 100
 }

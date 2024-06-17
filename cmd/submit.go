@@ -44,7 +44,7 @@ var (
 			correct, total := quizService.SubmitAnswers(answers)
 			fmt.Printf("You got %d out of %d questions correct.\n", correct, total)
 
-			performance := quizService.GetPerformance(correct)
+			performance := quizService.GetPerformance(correct, total)
 			fmt.Printf("You were better than %.2f%% of all quizzers.\n", performance)
 		},
 	}
