@@ -16,7 +16,13 @@ func NewQuizHandler(service *service.QuizService) *QuizHandler {
 }
 
 func (h *QuizHandler) GetQuestions(w http.ResponseWriter, r *http.Request) {
-	questions := h.service.GetQuestions()
+	questions, err := h.service.GetQuestions()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	json.NewEncoder(w).Encode(questions)
 }
 
@@ -28,8 +34,14 @@ func (h *QuizHandler) SubmitAnswers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	correct, total := h.service.SubmitAnswers(answers)
+	correct, total, err := h.service.SubmitAnswers(answers)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	performance := h.service.GetPerformance(correct, total)
+
 	response := map[string]int{
 		"correct":     correct,
 		"total":       total,

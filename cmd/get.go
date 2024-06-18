@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -11,7 +12,11 @@ var (
 		Use:   "get",
 		Short: "Get the list of questions",
 		Run: func(cmd *cobra.Command, args []string) {
-			questions := quizService.GetQuestions()
+			questions, err := quizService.GetQuestions()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error fetching questions: %v\n", err)
+				os.Exit(1)
+			}
 			for _, q := range questions {
 				fmt.Printf("Question %d: %s\n", q.ID, q.Text)
 				for i, option := range q.Options {

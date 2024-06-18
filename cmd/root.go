@@ -5,7 +5,7 @@ package cmd
 
 import (
 	"os"
-	"quiz-app/internal/adapter/repository"
+	quizrepository "quiz-app/internal/adapter/repository"
 	"quiz-app/internal/core/service"
 
 	"github.com/spf13/cobra"

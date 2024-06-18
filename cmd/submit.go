@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -41,7 +42,11 @@ var (
 				answers[questionID] = optionID
 			}
 
-			correct, total := quizService.SubmitAnswers(answers)
+			correct, total, err := quizService.SubmitAnswers(answers)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error submitting answers: %v\n", err)
+				os.Exit(1)
+			}
 			fmt.Printf("You got %d out of %d questions correct.\n", correct, total)
 
 			performance := quizService.GetPerformance(correct, total)

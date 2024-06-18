@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"quiz-app/internal/core/domain"
 	"quiz-app/internal/core/port/output"
 )
@@ -13,12 +14,19 @@ func NewQuizService(repo output.QuizRepository) *QuizService {
 	return &QuizService{repo: repo}
 }
 
-func (service *QuizService) GetQuestions() []domain.QuestionEntity {
-	return service.repo.FetchQuestions()
+func (service *QuizService) GetQuestions() ([]domain.QuestionEntity, error) {
+	questions := service.repo.FetchQuestions()
+	if len(questions) == 0 {
+		return nil, errors.New("no questions available")
+	}
+	return questions, nil
 }
 
-func (service *QuizService) SubmitAnswers(answers map[int]int) (int, int) {
+func (service *QuizService) SubmitAnswers(answers map[int]int) (int, int, error) {
 	questions := service.repo.FetchQuestions()
+	if len(questions) == 0 {
+		return 0, 0, errors.New("no questions available")
+	}
 	correctCount := 0
 
 	for _, question := range questions {
@@ -30,7 +38,7 @@ func (service *QuizService) SubmitAnswers(answers map[int]int) (int, int) {
 	service.repo.SaveResult(correctCount)
 
 	totalQuestions := len(questions)
-	return correctCount, totalQuestions
+	return correctCount, totalQuestions, nil
 }
 
 func (s *QuizService) GetPerformance(validAnswers int, totalAnswers int) float64 {

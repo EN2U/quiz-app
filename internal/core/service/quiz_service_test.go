@@ -1,7 +1,7 @@
 package service_test
 
 import (
-	"quiz-app/internal/adapter/repository"
+	quizrepository "quiz-app/internal/adapter/repository"
 	"quiz-app/internal/core/service"
 	"testing"
 )
@@ -10,7 +10,7 @@ func TestQuizService(t *testing.T) {
 	repository := quizrepository.NewQuizRepository()
 	service := service.NewQuizService(repository)
 
-	questions := service.GetQuestions()
+	questions, _ := service.GetQuestions()
 	if len(questions) != 4 {
 		t.Errorf("expected 2 questions, got %d", len(questions))
 	}
@@ -20,7 +20,7 @@ func TestQuizService(t *testing.T) {
 		2: 1,
 	}
 
-	correct, total := service.SubmitAnswers(answers)
+	correct, total, _ := service.SubmitAnswers(answers)
 	if correct != 2 {
 		t.Errorf("expected 2 correct answers, got %d", correct)
 	}
